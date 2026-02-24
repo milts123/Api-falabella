@@ -1,9 +1,6 @@
 // ordersService.js
 
-const fetch = require('node-fetch');
-
-// Base URL for the Falabella API
-const API_URL = 'https://api.falabella.com/orders';
+const falabellaClient = require('../config/falabellaClient');
 
 /**
  * Fetch orders from Falabella API
@@ -12,16 +9,12 @@ const API_URL = 'https://api.falabella.com/orders';
  */
 async function fetchOrders(userId) {
     try {
-        const response = await fetch(`${API_URL}?userId=${userId}`);
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-
-        const orders = await response.json();
-        return orders;
+        const response = await falabellaClient.get('/orders', {
+            params: { userId }
+        });
+        return response.data;
     } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error('Error fetching orders:', error.message);
         throw error;
     }
 }
