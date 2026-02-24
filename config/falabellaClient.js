@@ -3,10 +3,10 @@
 const axios = require('axios');
 
 const falabellaClient = axios.create({
-    baseURL: 'https://api.falabella.com',
-    timeout: 1000,
+    baseURL: process.env.FALABELLA_API_URL || 'https://api.falabella.com/v500.0.0',
+    timeout: 10000, // 10 seconds to accommodate Falabella API response times
     headers: {
-        'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual access token
+        'Authorization': `Bearer ${process.env.FALABELLA_API_KEY || ''}`,
         'Content-Type': 'application/json',
     }
 });

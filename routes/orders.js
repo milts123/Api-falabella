@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
-
-// Mock orders data
-const orders = [
-    { id: 1, item: 'Product A', quantity: 2, price: 20.0 },
-    { id: 2, item: 'Product B', quantity: 1, price: 15.0 },
-    { id: 3, item: 'Product C', quantity: 3, price: 30.0 }
-];
+const { fetchOrders } = require('../services/ordersService');
 
 // GET route to fetch orders
-router.get('/', (req, res) => {
-    res.json(orders);
+router.get('/', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        const orders = await fetchOrders(userId);
+        res.json(orders);
+    } catch (error) {
+        const message = error.cause?.message || error.message || 'Unknown error';
+        res.status(502).json({ status: 'error', error: message });
+    }
 });
 
 module.exports = router;
